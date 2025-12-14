@@ -54,7 +54,7 @@ public class Order {
 	}
 	
 	public boolean requestCancel() {
-		if (m_status != Order_Status.DELIVERED) {
+		if (m_status.canCancel()) {
 			m_status = Order_Status.CANCELED;
 			return true;
 		} else {
