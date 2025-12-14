@@ -20,6 +20,23 @@ public class RegisteredClient extends Client {
 	private Mailing_Preferences m_mailing_preferences;
 	
 	/**
+	 * Hash a plain-text password using SHA-256
+	 * 
+	 * @param password	Plain-text password to hash
+	 * @return	Hashed password as byte array, or null if hashing fails
+	 */
+	private byte[] hashPassword(String password) {
+		MessageDigest digest;
+		try {
+			digest = MessageDigest.getInstance("SHA-256");
+			return digest.digest(password.getBytes());
+		} catch (NoSuchAlgorithmException e) {
+			System.out.println("Something went wrong");
+			return null;
+		}
+	}
+	
+	/**
 	 * Constructor
 	 * 
 	 * @param name	Client's name
@@ -30,13 +47,7 @@ public class RegisteredClient extends Client {
 	public RegisteredClient(String name, Address address, String password, Mailing_Preferences mailing_preferences) {
 		super(name, address);
 		
-		MessageDigest digest;
-		try {
-			digest = MessageDigest.getInstance("SHA-256");
-			m_password = digest.digest(password.getBytes());
-		} catch (NoSuchAlgorithmException e) {
-			System.out.println("Something went wrong");
-		}
+		m_password = hashPassword(password);
 		
 		m_order_history = new ArrayList<Integer>();
 		m_mailing_preferences = mailing_preferences;
@@ -49,18 +60,11 @@ public class RegisteredClient extends Client {
 	 * @return	boolean
 	 */
 	public boolean checkPassword(String password) {
-		MessageDigest digest;
-		try {
-			digest = MessageDigest.getInstance("SHA-256");
-			if (m_password.equals(digest.digest(password.getBytes())))
-				return true;
-			else
-				return false;
-				
-		} catch (NoSuchAlgorithmException e) {
-			System.out.println("Something went wrong");
-		}
-		return false;
+		byte[] hashedPassword = hashPassword(password);
+		if (hashedPassword != null && m_password.equals(hashedPassword))
+			return true;
+		else
+			return false;
 	}
 	
 	/**
@@ -69,13 +73,7 @@ public class RegisteredClient extends Client {
 	 * @param password	New password (plain-text)
 	 */
 	public void updatePassword(String password) {
-		MessageDigest digest;
-		try {
-			digest = MessageDigest.getInstance("SHA-256");
-			m_password = digest.digest(password.getBytes());
-		} catch (NoSuchAlgorithmException e) {
-			System.out.println("Something went wrong");
-		}		
+		m_password = hashPassword(password);
 	}
 	
 	/**
