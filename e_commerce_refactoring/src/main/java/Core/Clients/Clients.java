@@ -7,8 +7,8 @@ import java.util.HashMap;
  */
 public class Clients {
 	
-	HashMap<String, RegisteredClient> m_clients;
-	HashMap<Integer, Client> m_all_clients;
+	private HashMap<String, RegisteredClient> m_clients;
+	private HashMap<Integer, Client> m_all_clients;
 	
 	/**
 	 * Constructor
