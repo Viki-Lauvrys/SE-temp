@@ -35,10 +35,9 @@ public class Orders {
 	}
 	
 	public boolean requestOrderCancel(int oid) {
-		for (Order o : m_orders) {
-			if (o.ID() == oid) {
-				return o.requestCancel();
-			}
+		Order order = m_id_order.get(oid);
+		if (order != null) {
+			return order.requestCancel();
 		}
 		return false;
 	}
